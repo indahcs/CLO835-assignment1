@@ -1,0 +1,73 @@
+version: '3.8'
+
+networks:
+  mynet:
+    driver: bridge
+
+services:
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile_mysql
+    container_name: mysql
+    networks:
+      - mynet
+    environment:
+      MYSQL_ROOT_PASSWORD: pw
+
+  blue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blue
+    networks:
+      - mynet
+    ports:
+      - "8081:8080"
+    environment:
+      DBHOST: mysql
+      DBPORT: 3306
+      DBUSER: root
+      DBPWD: pw
+      DATABASE: employees
+      APP_COLOR: blue
+    depends_on:
+      - mysql
+
+  pink:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pink
+    networks:
+      - mynet
+    ports:
+      - "8082:8080"
+    environment:
+      DBHOST: mysql
+      DBPORT: 3306
+      DBUSER: root
+      DBPWD: pw
+      DATABASE: employees
+      APP_COLOR: pink
+    depends_on:
+      - mysql
+
+  lime:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lime
+    networks:
+      - mynet
+    ports:
+      - "8083:8080"
+    environment:
+      DBHOST: mysql
+      DBPORT: 3306
+      DBUSER: root
+      DBPWD: pw
+      DATABASE: employees
+      APP_COLOR: lime
+    depends_on:
+      - mysql
